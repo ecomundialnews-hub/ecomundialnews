@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Eco Mundial News - Noticias globales sobre medio ambiente, sostenibilidad, clima y actualidad mundial.">
+  <title>Eco Mundial News</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #0891b2);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+      transition: opacity 0.3s;
+    }
+
+    nav a:hover {
+      opacity: 0.8;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      background: linear-gradient(rgba(15, 118, 110, 0.85), rgba(15, 118, 110, 0.85)), url('https://images.unsplash.com/photo-1474540412691-9f1849f5b1e0?ixlib=rb-4.0.3') no-repeat center center/cover;
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero h2 {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .noticias {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .noticia {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+
+    .noticia:hover {
+      transform: translateY(-6px);
+    }
+
+    .noticia img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .noticia-content {
+      padding: 1.3rem;
+    }
+
+    .noticia h3 {
+      margin-bottom: 0.6rem;
+      color: #0f766e;
+    }
+
+    .noticia p {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      background-color: #0c4a6e;
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      font-size: 0.95rem;
+    }
+
+    .redes {
+      margin-top: 1rem;
+    }
+
+    .redes a {
+      color: #60a5fa;
+      text-decoration: none;
+      margin: 0 0.8rem;
+      font-weight: 600;
+    }
+
+    .redes a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      nav {
+        margin-top: 1rem;
+      }
+      nav a {
+        margin: 0 0.7rem;
+      }
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+      .redes a {
+        display: block;
+        margin: 0.6rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <h1>Eco Mundial News</h1>
+    </div>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#ambiente">Ambiente</a>
+      <a href="#clima">Clima</a>
+      <a href="#mundo">Mundo</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <h2>Noticias con conciencia planetaria</h2>
+      <p>Información veraz, oportuna y comprometida con el futuro de nuestro planeta.</p>
+    </section>
+
+    <section class="noticias">
+      <article class="noticia">
+        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3" alt="Energía renovable">
+        <div class="noticia-content">
+          <h3>América Latina impulsa energía solar</h3>
+          <p>Países como Chile y México lideran la transición energética con inversiones récord en paneles solares.</p>
+        </div>
+      </article>
+
+      <article class="noticia">
+        <img src="https://images.unsplash.com/photo-1601178859400-31f8387c4b7a?ixlib=rb-4.0.3" alt="Acuerdo climático">
+        <div class="noticia-content">
+          <h3>Nuevo pacto global contra el plástico</h3>
+          <p>175 naciones acuerdan reducir la contaminación plástica para 2040 en histórica cumbre ambiental.</p>
+        </div>
+      </article>
+
+      <article class="noticia">
+        <img src="https://images.unsplash.com/photo-1464279781194-751a7d8d8a8a?ixlib=rb-4.0.3" alt="Bosques">
+        <div class="noticia-content">
+          <h3>Alerta por deforestación en la Amazonía</h3>
+          <p>Organismos internacionales exigen acción urgente ante el aumento del 22% en la tala ilegal.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Eco Mundial News. Periodismo comprometido con la Tierra.</p>
+    <p>Repositorio: <a href="https://github.com/ecomundialnews-hub/ecomundialnews" style="color:#60a5fa;">github.com/ecomundialnews-hub/ecomundialnews</a></p>
+    
+    <div class="redes">
+      <a href="https://www.tiktok.com/@ecomundialnews" target="_blank" rel="noopener">@ecomundialnews (TikTok)</a>
+      <a href="https://www.youtube.com/@EcoMundialNews" target="_blank" rel="noopener">@EcoMundialNews (YouTube)</a>
+    </div>
+  </footer>
+
+</body>
+</html>
