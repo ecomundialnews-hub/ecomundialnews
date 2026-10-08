@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO MUNDIAL NEWS - Portal de Noticias Globales</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                        },
+                        news: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#3b82f6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP BAR / TICKER -->
+    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3 overflow-hidden">
+                <span class="bg-red-600 text-white font-bold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase animate-pulse flex-shrink-0">Última Hora</span>
+                <p id="ticker-text" class="truncate text-slate-200">Cumbre climática global acuerda nuevas metas de reducción de emisiones para 2030.</p>
+            </div>
+            <div class="flex items-center space-x-4 text-slate-400">
+                <span id="current-date">Miércoles, 7 de Octubre de 2026</span>
+                <div class="flex space-x-3">
+                    <a href="#" class="hover:text-brand-500 transition"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="hover:text-brand-500 transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-brand-500 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-brand-500 transition"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="#" class="flex items-center space-x-2 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <div>
+                            <span class="text-xl sm:text-2xl font-black tracking-tight text-slate-900">ECO MUNDIAL</span>
+                            <span class="block text-[10px] font-bold tracking-widest text-brand-600 uppercase -mt-1">News & Análisi Global</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Nav Categories -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-2 rounded-lg text-sm font-semibold text-brand-700 bg-brand-50 transition">Todas</button>
+                    <button onclick="filterCategory('internacional')" class="cat-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Internacional</button>
+                    <button onclick="filterCategory('economia')" class="cat-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Economía</button>
+                    <button onclick="filterCategory('tecnologia')" class="cat-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Tecnología</button>
+                    <button onclick="filterCategory('ambiente')" class="cat-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition">Medio Ambiente</button>
+                </nav>
+
+                <!-- Search and Mobile Toggle -->
+                <div class="flex items-center space-x-3">
+                    <div class="relative hidden sm:block w-48 lg:w-64">
+                        <input type="text" id="searchInput" onkeyup="handleSearch()" placeholder="Buscar noticias..." class="w-full bg-slate-100 border border-slate-200 text-sm rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <div class="relative mb-3">
+                <input type="text" id="mobileSearchInput" onkeyup="handleSearchMobile()" placeholder="Buscar noticias..." class="w-full bg-slate-100 border border-slate-200 text-sm rounded-full pl-9 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            </div>
+            <button onclick="filterCategory('all'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Todas las categorías</button>
+            <button onclick="filterCategory('internacional'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Internacional</button>
+            <button onclick="filterCategory('economia'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Economía</button>
+            <button onclick="filterCategory('tecnologia'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Tecnología</button>
+            <button onclick="filterCategory('ambiente'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Medio Ambiente</button>
+        </div>
+    </header>
+
+    <!-- HERO / FEATURED NEWS BANNER -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 group min-h-[420px] flex items-end">
+            <div class="absolute inset-0">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80" alt="Banner Destacado" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700 opacity-70" onerror="this.src='https://placehold.co/1200x600/0f172a/ffffff?text=Eco+Mundial+News'">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+            </div>
+            
+            <div class="relative z-10 p-6 sm:p-10 lg:p-12 max-w-3xl">
+                <div class="flex items-center space-x-3 mb-3">
+                    <span class="bg-brand-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">Destacado</span>
+                    <span class="text-slate-300 text-xs font-medium"><i class="fa-regular fa-clock mr-1"></i> Hace 2 horas</span>
+                    <span class="text-slate-300 text-xs font-medium"><i class="fa-regular fa-user mr-1"></i> Por Redacción Eco</span>
+                </div>
+                <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-4 group-hover:text-brand-300 transition-colors">
+                    La Revolución de las Energías Limpias: Así es como el hidrógeno verde lidera la transición mundial
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base line-clamp-2 sm:line-clamp-none mb-6">
+                    Nuevos proyectos multiestatales prometen abaratar el costo de producción del hidrógeno verde en un 40% para el próximo año, marcando un hito histórico en la descarbonización de la industria pesada y el transporte global.
+                </p>
+                <button onclick="openArticleModal('La Revolución de las Energías Limpias: Así es como el hidrógeno verde lidera la transición mundial', 'Nuevos proyectos multiestatales prometen abaratar el costo de producción del hidrógeno verde en un 40% para el próximo año, marcando un hito histórico en la descarbonización de la industria pesada y el transporte global. Expertos de todo el mundo se han reunido en Ginebra para firmar un tratado de cooperación tecnológica que permitirá compartir patentes e infraestructura crítica sin precedentes.', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80', 'Medio Ambiente', 'Hace 2 horas', 'Redacción Eco Mundial')" class="inline-flex items-center space-x-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-brand-500/30 transition transform hover:-translate-y-0.5">
+                    <span>Leer artículo completo</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN LAYOUT CONTENT + SIDEBAR -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT 2 COLUMNS: NEWS GRID -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3 h-6 bg-brand-600 rounded-sm"></div>
+                        <h2 id="sectionTitle" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Últimas Noticias</h2>
+                    </div>
+                    <span id="resultsCount" class="text-xs font-medium text-slate-500">Mostrando artículos globales</span>
+                </div>
+
+                <!-- Articles Grid -->
+                <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Dynamic JavaScript will populate cards here -->
+                </div>
+
+                <!-- Pagination Load More -->
+                <div class="text-center pt-6">
+                    <button onclick="loadMoreArticles()" id="loadMoreBtn" class="bg-white hover:bg-slate-100 text-slate-700 font-semibold px-6 py-3 rounded-xl border border-slate-200 shadow-sm transition">
+                        Cargar más noticias
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT 1 COLUMN: SIDEBAR -->
+            <aside class="space-y-8">
+                
+                <!-- NEWSLETTER WIDGET -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl mb-4 font-bold">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">Boletín Informativo</h3>
+                        <p class="text-slate-300 text-xs mb-4">Recibe las noticias más impactantes del mundo directamente en tu correo cada mañana.</p>
+                        
+                        <form onsubmit="handleSubscribe(event)" class="space-y-3">
+                            <input type="email" id="subscriberEmail" required placeholder="tu.correo@ejemplo.com" class="w-full bg-slate-800/80 border border-slate-700 text-sm rounded-xl px-4 py-2.5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition">
+                                Suscribirme Gratis
+                            </button>
+                        </form>
+                        <p id="subscribeMsg" class="text-xs text-emerald-400 mt-2 hidden text-center font-medium">¡Gracias por suscribirte a Eco Mundial!</p>
+                    </div>
+                </div>
+
+                <!-- MOST READ WIDGET -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex items-center space-x-2 mb-4 pb-2 border-b border-slate-100">
+                        <i class="fa-solid fa-fire text-amber-500"></i>
+                        <h3 class="font-bold text-slate-900 text-lg">Lo más leído</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <article onclick="openArticleModal('Inteligencia Artificial y el futuro del empleo global: Informe 2026', 'Un estudio reciente de organismos internacionales revela cómo la automatización está transformando el mercado laboral en más de 50 países.', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80', 'Tecnología', 'Hace 4 horas', 'Ana Sofía Ruiz')" class="flex items-start space-x-3 group cursor-pointer">
+                            <span class="text-2xl font-black text-slate-300 group-hover:text-brand-600 transition">01</span>
+                            <div>
+                                <span class="text-[10px] font-bold text-brand-600 uppercase">Tecnología</span>
+                                <h4 class="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-brand-600 transition line-clamp-2 leading-snug">
+                                    Inteligencia Artificial y el futuro del empleo global: Informe 2026
+                                </h4>
+                            </div>
+                        </article>
+
+                        <article onclick="openArticleModal('Mercados asiáticos reaccionan a la nueva moneda digital global', 'Bancos centrales de la región implementan sistemas de intercambio interoperables, sacudiendo el mercado financiero tradicional.', 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80', 'Economía', 'Hace 6 horas', 'Carlos Mendoza')" class="flex items-start space-x-3 group cursor-pointer">
+                            <span class="text-2xl font-black text-slate-300 group-hover:text-brand-600 transition">02</span>
+                            <div>
+                                <span class="text-[10px] font-bold text-brand-600 uppercase">Economía</span>
+                                <h4 class="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-brand-600 transition line-clamp-2 leading-snug">
+                                    Mercados asiáticos reaccionan a la nueva moneda digital global
+                                </h4>
+                            </div>
+                        </article>
+
+                        <article onclick="openArticleModal('Descubren ecosistema submarino virgen en las profundidades del Pacífico', 'Científicos marinos registran más de 40 especies nunca antes vistas durante una expedición oceanográfica autónoma.', 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80', 'Medio Ambiente', 'Hace 9 horas', 'Dr. Esteban Valdés')" class="flex items-start space-x-3 group cursor-pointer">
+                            <span class="text-2xl font-black text-slate-300 group-hover:text-brand-600 transition">03</span>
+                            <div>
+                                <span class="text-[10px] font-bold text-brand-600 uppercase">Medio Ambiente</span>
+                                <h4 class="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-brand-600 transition line-clamp-2 leading-snug">
+                                    Descubren ecosistema submarino virgen en las profundidades del Pacífico
+                                </h4>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- SOCIAL CHANNELS WIDGET -->
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-900 text-base mb-3">Síguenos en el Canal</h3>
+                    <p class="text-slate-500 text-xs mb-4">Únete a nuestra comunidad en redes para transmisiones en directo y debates diarios.</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="#" class="flex items-center space-x-2 bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-2xl transition font-semibold text-xs">
+                            <i class="fab fa-youtube text-base"></i>
+                            <span>YouTube</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 bg-sky-50 hover:bg-sky-100 text-sky-500 p-3 rounded-2xl transition font-semibold text-xs">
+                            <i class="fab fa-twitter text-base"></i>
+                            <span>Twitter / X</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 bg-pink-50 hover:bg-pink-100 text-pink-600 p-3 rounded-2xl transition font-semibold text-xs">
+                            <i class="fab fa-instagram text-base"></i>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-2 bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-2xl transition font-semibold text-xs">
+                            <i class="fab fa-telegram text-base"></i>
+                            <span>Telegram</span>
+                        </a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- ARTICLE MODAL -->
+    <div id="articleModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeArticleModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 hover:bg-white text-slate-700 rounded-full flex items-center justify-center shadow transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="modalContent">
+                <!-- Dynamic Modal Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-black text-sm">
+                            <i class="fa-solid fa-earth-americas"></i>
+                        </div>
+                        <span class="text-lg font-black text-white tracking-tight">ECO MUNDIAL</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Tu fuente confiable de noticias internacionales, análisis económico, avances tecnológicos y conservación ambiental sin filtros.
+                    </p>
+                    <div class="flex space-x-3 text-slate-300">
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition"><i class="fab fa-youtube text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition"><i class="fab fa-twitter text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition"><i class="fab fa-instagram text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition"><i class="fab fa-telegram text-xs"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Categorías</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" onclick="filterCategory('internacional')" class="hover:text-white transition">Internacional</a></li>
+                        <li><a href="#" onclick="filterCategory('economia')" class="hover:text-white transition">Economía Global</a></li>
+                        <li><a href="#" onclick="filterCategory('tecnologia')" class="hover:text-white transition">Tecnología e IA</a></li>
+                        <li><a href="#" onclick="filterCategory('ambiente')" class="hover:text-white transition">Medio Ambiente</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Legal y Ayuda</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" class="hover:text-white transition">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-white transition">Código Ético Informativo</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contacto Editorial</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Canal Oficial</h4>
+                    <p class="text-xs text-slate-400 mb-3">¿Tienes una noticia o reporte ciudadano? Envíanos tu material directamente.</p>
+                    <a href="mailto:contacto@ecomundialnews.com" class="inline-block bg-slate-800 hover:bg-brand-600 text-white font-medium text-xs px-4 py-2.5 rounded-xl transition">
+                        contacto@ecomundialnews.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500">
+                <p>&copy; 2026 Eco Mundial News. Todos los derechos reservados.</p>
+                <p class="mt-2 sm:mt-0">Diseñado para el periodismo independiente del futuro.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Array of articles for the news blog
+        const articles = [
+            {
+                id: 1,
+                title: "Cumbre climática global acuerda nuevas metas de reducción de emisiones",
+                category: "ambiente",
+                categoryName: "Medio Ambiente",
+                date: "Hace 1 hora",
+                author: "Lucía Montenegro",
+                image: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=800&q=80",
+                snippet: "Delegados de más de 190 países han ratificado un pacto histórico para acelerar la transición hacia energías renovables antes del cierre de la década.",
+                content: "Delegados de más de 190 países han ratificado un pacto histórico en la cumbre anual para acelerar la transición hacia fuentes de energía solar y eólica antes del cierre de la década. El acuerdo contempla fondos especiales para naciones en desarrollo que buscan modernizar sus redes eléctricas sin depender del carbón."
+            },
+            {
+                id: 2,
+                title: "Bancos centrales evalúan nuevas políticas ante la inflación global",
+                category: "economia",
+                categoryName: "Economía",
+                date: "Hace 3 horas",
+                author: "Roberto Silva",
+                image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=800&q=80",
+                snippet: "Los ministros de finanzas de las principales economías discuten medidas fiscales coordinadas para estabilizar los tipos de cambio este trimestre.",
+                content: "Los ministros de finanzas de las principales economías discuten medidas fiscales coordinadas para estabilizar los tipos de cambio ante fluctuaciones recientes en los mercados de materias primas. Analistas económicos señalan que la cooperación internacional será clave para evitar desaceleraciones severas."
+            },
+            {
+                id: 3,
+                title: "Avance revolucionario en computación cuántica supera pruebas comerciales",
+                category: "tecnologia",
+                categoryName: "Tecnología",
+                date: "Hace 5 horas",
+                author: "Mateo Chen",
+                image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80",
+                snippet: "Un nuevo procesador cuántico logra resolver problemas complejos de logística farmacéutica en cuestión de milisegundos.",
+                content: "Un nuevo procesador cuántico logra resolver problemas complejos de logística farmacéutica y simulación molecular en cuestión de milisegundos, abriendo un abanico de posibilidades para el desarrollo acelerado de medicamentos y ciberseguridad avanzada."
+            },
+            {
+                id: 4,
+                title: "Elecciones clave en el sudeste asiático redefinen alianzas comerciales",
+                category: "internacional",
+                categoryName: "Internacional",
+                date: "Hace 7 horas",
+                author: "Valeria Soto",
+                image: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80",
+                snippet: "Los resultados electorales en puntos estratégicos de comercio marítimo marcan un nuevo rumbo en las relaciones diplomáticas del pacífico.",
+                content: "Los resultados electorales en puntos estratégicos de comercio marítimo marcan un nuevo rumbo en las relaciones diplomáticas del pacífico. Expertos en geopolítica apuntan a un fortalecimiento de los tratados de libre comercio multilaterales en la región."
+            },
+            {
+                id: 5,
+                title: "Iniciativa global de reforestación urbana transforma ciudades de concreto",
+                category: "ambiente",
+                categoryName: "Medio Ambiente",
+                date: "Hace 10 horas",
+                author: "Lucía Montenegro",
+                image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+                snippet: "Metrópolis en Europa y América Latina implementan 'bosques verticales' en edificios públicos para reducir la temperatura urbana.",
+                content: "Metrópolis en Europa y América Latina implementan 'bosques verticales' en fachadas de edificios públicos para reducir hasta 3 grados la temperatura ambiental urbana y mejorar sustancialmente la calidad del aire para millones de ciudadanos."
+            },
+            {
+                id: 6,
+                title: "Ciberseguridad: Se reportan nuevos estándares internacionales para datos",
+                category: "tecnologia",
+                categoryName: "Tecnología",
+                date: "Hace 12 horas",
+                author: "Mateo Chen",
+                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80",
+                snippet: "Organismos de ciberdefensa unifican protocolos de encriptación para proteger infraestructuras críticas contra ataques informáticos.",
+                content: "Organismos de ciberdefensa unifican protocolos de encriptación para proteger infraestructuras críticas contra ataques informáticos transfronterizos, estableciendo multas severas para corporaciones que no cumplan con auditorías trimestrales."
+            }
+        ];
+
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderArticles();
+            updateCurrentDate();
+        });
+
+        function updateCurrentDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            document.getElementById('current-date').innerText = today.toLocaleDateString('es-ES', options);
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articlesGrid');
+            grid.innerHTML = '';
+
+            let filtered = articles.filter(article => {
+                const matchesCategory = currentFilter === 'all' || article.category === currentFilter;
+                const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      article.snippet.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      article.categoryName.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            document.getElementById('resultsCount').innerText = `Mostrando ${filtered.length} artículos`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-2 text-center py-16 bg-white rounded-3xl border border-slate-200">
+                        <i class="fa-solid fa-triangle-exclamation text-4xl text-amber-500 mb-3"></i>
+                        <h3 class="text-lg font-bold text-slate-800">No se encontraron noticias</h3>
+                        <p class="text-sm text-slate-500 mt-1">Intenta con otra palabra clave o categoría.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(art => {
+                const card = document.createElement('article');
+                card.className = "bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-200 transition-all duration-300 flex flex-col group cursor-pointer";
+                card.onclick = () => openArticleModal(art.title, art.content, art.image, art.categoryName, art.date, art.author);
+                
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden bg-slate-100">
+                        <img src="${art.image}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/0f172a/ffffff?text=Eco+Mundial'">
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
+                            ${art.categoryName}
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center space-x-3 text-xs text-slate-400 mb-2">
+                                <span><i class="fa-regular fa-clock mr-1"></i> ${art.date}</span>
+                                <span>•</span>
+                                <span><i class="fa-regular fa-user mr-1"></i> ${art.author}</span>
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-900 group-hover:text-brand-600 transition line-clamp-2 leading-snug mb-2">
+                                ${art.title}
+                            </h3>
+                            <p class="text-slate-600 text-xs sm:text-sm line-clamp-3 leading-relaxed mb-4">
+                                ${art.snippet}
+                            </p>
+                        </div>
+                        <div class="flex items-center text-brand-600 font-semibold text-xs group-hover:translate-x-1 transition-transform pt-3 border-t border-slate-100">
+                            <span>Leer noticia</span>
+                            <i class="fa-solid fa-arrow-right ml-2 text-[10px]"></i>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            
+            // Highlight active button in desktop
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                btn.className = "cat-btn px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition";
+            });
+            event.currentTarget.className = "cat-btn px-3.5 py-2 rounded-lg text-sm font-semibold text-brand-700 bg-brand-50 transition";
+            
+            // Update section title header
+            const titleMap = {
+                'all': 'Últimas Noticias',
+                'internacional': 'Noticias Internacionales',
+                'economia': 'Economía y Finanzas',
+                'tecnologia': 'Innovación y Tecnología',
+                'ambiente': 'Medio Ambiente y Sostenibilidad'
+            };
+            document.getElementById('sectionTitle').innerText = titleMap[cat] || 'Noticias';
+            
+            renderArticles();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
+            // Sync mobile search if open
+            const mobileInput = document.getElementById('mobileSearchInput');
+            if(mobileInput) mobileInput.value = searchQuery;
+            renderArticles();
+        }
+
+        function handleSearchMobile() {
+            searchQuery = document.getElementById('mobileSearchInput').value;
+            const desktopInput = document.getElementById('searchInput');
+            if(desktopInput) desktopInput.value = searchQuery;
+            renderArticles();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function openArticleModal(title, content, image, category, date, author) {
+            const modal = document.getElementById('articleModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <div class="relative h-64 sm:h-72 w-full bg-slate-900">
+                    <img src="${image}" alt="${title}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/800x500/0f172a/ffffff?text=Eco+Mundial'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-4 left-6 right-6">
+                        <span class="bg-brand-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow mb-2 inline-block">${category}</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white leading-snug">${title}</h2>
+                    </div>
+                </div>
+                <div class="p-6 sm:p-8 space-y-4">
+                    <div class="flex items-center justify-between text-xs text-slate-500 pb-4 border-b border-slate-100">
+                        <span><i class="fa-regular fa-user mr-1 font-semibold"></i> ${author}</span>
+                        <span><i class="fa-regular fa-clock mr-1"></i> ${date}</span>
+                    </div>
+                    <div class="prose prose-slate max-w-none text-slate-700 text-sm sm:text-base leading-relaxed space-y-4 font-serif">
+                        <p class="font-sans font-medium text-slate-900 text-base sm:text-lg">${content}</p>
+                        <p>Las implicaciones de este suceso continúan desarrollándose a medida que los analistas de Eco Mundial News siguen de cerca los comunicados oficiales emitidos en las últimas horas desde las principales sedes diplomáticas y científicas.</p>
+                        <p>Mantente conectado a nuestras transmisiones en vivo y boletines diarios para recibir actualizaciones minuto a minuto sobre este y otros acontecimientos de trascendencia global.</p>
+                    </div>
+                    <div class="pt-6 border-t border-slate-100 flex justify-between items-center">
+                        <div class="flex space-x-2">
+                            <span class="text-xs font-semibold text-slate-500">Compartir:</span>
+                            <button onclick="shareAlert()" class="text-slate-600 hover:text-brand-600 px-2 py-1"><i class="fab fa-twitter"></i></button>
+                            <button onclick="shareAlert()" class="text-slate-600 hover:text-brand-600 px-2 py-1"><i class="fab fa-facebook"></i></button>
+                            <button onclick="shareAlert()" class="text-slate-600 hover:text-brand-600 px-2 py-1"><i class="fab fa-whatsapp"></i></button>
+                        </div>
+                        <button onclick="closeArticleModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition">
+                            Cerrar lectura
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('articleModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = document.getElementById('subscriberEmail').value;
+            if(email) {
+                document.getElementById('subscriberEmail').value = '';
+                const msg = document.getElementById('subscribeMsg');
+                msg.classList.remove('hidden');
+                setTimeout(() => {
+                    msg.classList.add('hidden');
+                }, 5000);
+            }
+        }
+
+        function shareAlert() {
+            // Friendly custom message box instead of alert()
+            const notif = document.createElement('div');
+            notif.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl animate-bounce";
+            notif.innerHTML = `<i class="fa-solid fa-check text-brand-500 mr-2"></i> ¡Enlace copiado al portapapeles!`;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        function loadMoreArticles() {
+            const btn = document.getElementById('loadMoreBtn');
+            btn.innerText = "No hay más noticias recientes";
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    </script>
+</body>
+</html>
